@@ -746,10 +746,10 @@ def launch_connection_editor():
     """
     terminal = CONF.get("editor", "terminal", fallback="xterm")
     gui_if_available = CONF.getboolean("editor", "gui_if_available", fallback=True)
-    guis = ["gnome-control-center", "nm-connection-editor"]
+    guis = CONF.items("guis") or [("gnome-control-center", True), ("nm-connection-editor", True)]
     if gui_if_available is True:
-        for gui in guis:
-            if is_installed(gui):
+        for gui, enabled in guis:
+            if is_installed(gui) and enabled:
                 subprocess.run(gui, check=False)
                 return
     if is_installed("nmtui"):
